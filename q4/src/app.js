@@ -27,7 +27,7 @@ function loadProfile() {
     } catch (error) {
         console.error("Invalid JSON input:", error);
         alert("Profile data is incorrect. Check the format!");
-        return; 
+        return;
     }
 
     if (
@@ -38,15 +38,24 @@ function loadProfile() {
     }
 
     if (
-        typeof Data_parsed.username !== "string" || typeof Data_parsed.notifications !== "boolean"
+        typeof Data_parsed.username !== "string" || !Array.isArray(Data_parsed.notifications)
     ) {
         alert("Missing or invalid required fields. Check and try again.");
         return;
     }
 
+    const validNotifications = Data_parsed.notifications.every(
+        (n) => typeof n === "string"
+    );
+
+    if (!validNotifications) {
+        alert("Invalid notification format. Please check format and try again.");
+        return;
+    }
+
     const profile = {
         username: Data_parsed.username,
-        notifications: Data_parsed.notifications,
+        notifications: Data_parsed.notifications
     };
 
     currentProfile = profile;
